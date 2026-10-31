@@ -12,9 +12,9 @@ html,body{width:100%;height:100%;background:#000;color:#fff;overflow:hidden;over
 ::-webkit-scrollbar{display:none}button{border:0;background:none;color:inherit;cursor:pointer;font-size:inherit}svg{display:block;flex-shrink:0}.hidden{display:none!important}
 #app{position:fixed;inset:0;background:radial-gradient(90% 70% at 15% 0%,rgba(29,185,84,.16),transparent 60%),#000}
 #body{position:absolute;inset:0 0 5.7rem 0;display:flex;padding:.6rem .6rem 0;gap:.6rem}
-#nav{width:10.8rem;background:var(--card);border-radius:1.1rem;padding:.6rem;flex-shrink:0;display:flex;flex-direction:column;gap:.15rem;overflow-y:auto}
+#nav{width:11.4rem;background:var(--card);border-radius:1.1rem;padding:.6rem;flex-shrink:0;display:flex;flex-direction:column;gap:.15rem;overflow-y:auto}
 .ni{display:flex;align-items:center;width:100%;height:3rem;padding:0 .8rem;color:var(--t2);font-size:.95rem;font-weight:600;border-radius:.8rem;text-align:left;white-space:nowrap}
-.ni svg{margin-right:.7rem}.ni.on{background:var(--fill);color:#fff}.ni.on svg{color:var(--ac)}.ni:active{background:var(--fill)}.ni.fs{margin-top:auto}
+.ni .nv{width:1.55rem;height:1.55rem;margin-right:.7rem;transition:color .2s}.ni.on{background:var(--fill);color:#fff}.ni.on svg{color:var(--ac)}.ni:active{background:var(--fill)}.ni.fs{margin-top:auto}
 #main{flex:1;min-width:0;background:var(--card);border-radius:1.1rem;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.2rem 1.3rem 1.6rem}
 h1{font-size:2rem;font-weight:700;letter-spacing:-.03em;margin-bottom:.9rem;line-height:1.1}
 h2{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin:1.5rem 0 .7rem}
@@ -116,6 +116,14 @@ note:'M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z',vid:'M17 10.5V7a1 1 0 0 0-1-1H4a1 1
 plus:'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z',folder:'M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z',
 fs:'M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z'};
 const ic=(n,s)=>`<svg viewBox="0 0 24 24" style="width:${s};height:${s}" fill="currentColor"><path d="${P[n]}"/></svg>`;
+const N={
+home:'<path d="M4 10.5L12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/>',
+search:'<circle cx="10.5" cy="10.5" r="6.3"/><path d="M15.3 15.3L20 20"/>',
+lib:'<rect x="3.5" y="4" width="3.6" height="16" rx="1.2"/><rect x="9.3" y="4" width="3.6" height="16" rx="1.2"/><path d="M15.4 6.2l3.3-.9 3.2 13.6-3.3.9z"/>',
+local:'<path d="M3.5 7.5a2 2 0 0 1 2-2h3.6a2 2 0 0 1 1.4.6l1.2 1.2a2 2 0 0 0 1.4.6h5.4a2 2 0 0 1 2 2v7.6a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/>',
+fs:'<path d="M4 9V6a2 2 0 0 1 2-2h3M15 4h3a2 2 0 0 1 2 2v3M20 15v3a2 2 0 0 1-2 2h-3M9 20H6a2 2 0 0 1-2-2v-3"/>'};
+const NL={home:'Início',search:'Buscar',lib:'Biblioteca',local:'Arquivos locais'};
+const nic=(n,on)=>`<svg class="nv" viewBox="0 0 24 24" fill="${on&&n!=='search'&&n!=='fs'?'currentColor':'none'}" stroke="currentColor" stroke-width="${on&&n==='search'?2.3:1.7}" stroke-linecap="round" stroke-linejoin="round">${N[n]}</svg>`;
 const $=i=>document.getElementById(i);
 const ls=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
@@ -246,7 +254,7 @@ function rColl(){const c=coll;let h=`<div class="hd">${c.like?likeCov(9):cov(c.c
  h+=`<div class="acts"><button class="pbig" onclick="playColl()">${ic('play','1.9rem')}</button><button class="ib${shuffle?' on':''}" onclick="toggleShuffle();render(true)">${ic('shuf','1.7rem')}</button></div>`;return h+rows(c.idx)}
 function render(keep){const m=$('main'),st=keep?m.scrollTop:0;
  m.innerHTML=({home:rHome,search:rSearch,lib:rLib,local:rLocal,coll:rColl})[view]();m.scrollTop=st;
- const v=view==='coll'?prevView:view;['home','search','lib','local'].forEach(n=>$('n-'+n).className='ni'+(v===n?' on':''))}
+ const v=view==='coll'?prevView:view;['home','search','lib','local'].forEach(n=>{const b=$('n-'+n);b.className='ni'+(v===n?' on':'');b.innerHTML=nic(n,v===n)+NL[n]})}
 const go=v=>{view=v;coll=null;render()};
 function openColl(c){prevView=view==='coll'?prevView:view;coll=c;view='coll';render()}
 function openGroup(k,i){const g=groups(k)[i];openColl({kind:{artist:'ARTISTA',album:'ÁLBUM',folder:'PASTA'}[k],title:g.name,idx:g.idx,cover:g.c,round:k==='artist'})}
@@ -298,8 +306,7 @@ if(android&&!matchMedia('(display-mode: fullscreen), (display-mode: standalone)'
 addEventListener('keydown',e=>{if(e.key==='MediaTrackNext')next();else if(e.key==='MediaTrackPrevious')prev();else if(e.key==='MediaPlayPause')toggle();else if(e.key==='Escape')closeNP()});
 history.pushState({},'');addEventListener('popstate',()=>{history.pushState({},'');if($('np').classList.contains('open'))closeNP();else if(view==='coll'){view=prevView;coll=null;render()}});
 
-$('n-home').innerHTML=ic('home','1.6rem')+'Início';$('n-search').innerHTML=ic('search','1.6rem')+'Buscar';$('n-lib').innerHTML=ic('lib','1.6rem')+'Biblioteca';
-$('n-local').innerHTML=ic('folder','1.6rem')+'Arquivos locais';$('n-fs').innerHTML=ic('fs','1.6rem')+'Tela cheia';
+$('n-fs').innerHTML=nic('fs',0)+'Tela cheia';
 $('bprev').innerHTML=ic('prev','1.8rem');$('bnext').innerHTML=ic('next','1.8rem');$('nprev').innerHTML=ic('prev','2.2rem');$('nnext').innerHTML=ic('next','2.2rem');
 $('bpl').innerHTML=ic('play','2rem');$('bpa').innerHTML=ic('pause','2rem');$('npl').innerHTML=ic('play','2.5rem');$('npa').innerHTML=ic('pause','2.5rem');
 $('nsh').innerHTML=ic('shuf','1.6rem');$('nrp').innerHTML=ic('rep','1.6rem');$('npdown').innerHTML=ic('down','2.4rem');
