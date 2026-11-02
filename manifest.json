@@ -1,6 +1,6 @@
 {
-  "name": "CarPlay Box Music",
-  "short_name": "CarBox Music",
+  "name": "CarBox Music",
+  "short_name": "CarBox",
   "id": "./index.html",
   "start_url": "./index.html",
   "scope": "./",
