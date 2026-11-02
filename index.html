@@ -51,7 +51,7 @@ h2{font-size:1.3rem;font-weight:700;letter-spacing:-.02em;margin:1.8rem 0 .9rem}
 .empty{text-align:center;color:var(--t2);padding:3rem 1rem;font-size:1.1rem;line-height:1.5}.empty .acts{justify-content:center;margin-top:1.5rem}
 .tip{font-size:.85rem;color:var(--t2);max-width:32rem;margin:1rem auto 0;line-height:1.5}
 
-/* BARRA DE REPRODUÇÃO - Z-INDEX ALTO PARA FICAR ACIMA DE TUDO */
+/* BARRA DE REPRODUÇÃO */
 #bar{position:absolute;left:.5rem;right:.5rem;bottom:.5rem;height:4.4rem;border-radius:1rem;background:rgba(40,40,42,.85);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);display:flex;align-items:center;padding:0 .8rem;gap:.2rem;overflow:hidden;box-shadow:0 .4rem 1.2rem rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.05);color:#fff;z-index:50}
 body.light #bar{background:rgba(240,240,245,.9);color:#000;box-shadow:0 .4rem 1.2rem rgba(0,0,0,.1),inset 0 0 0 1px rgba(0,0,0,.05)}
 #bpb,#bp{position:absolute;left:0;bottom:0;height:.2rem}#bpb{right:0;background:rgba(120,120,128,.2)}#bp{background:var(--ac);width:0;transition:width .1s}
@@ -65,18 +65,28 @@ body.light #bar{background:rgba(240,240,245,.9);color:#000;box-shadow:0 .4rem 1.
 #np.open{transform:none}
 #npbg{position:absolute;inset:-4rem;z-index:-1;filter:blur(3rem) saturate(1.5);pointer-events:none}
 #npdown{position:absolute;top:1rem;left:1rem;width:3.4rem;height:3.4rem;border-radius:50%;background:rgba(120,120,128,.2);color:inherit;z-index:3;display:flex;align-items:center;justify-content:center;transition:background .2s}#npdown:hover{background:rgba(120,120,128,.4)}
-#npart{width:min(70vh,40vw);height:min(70vh,40vw);flex-shrink:0;position:relative;border-radius:1.2rem;overflow:hidden;box-shadow:0 2rem 4rem rgba(0,0,0,.5);background:#222;touch-action:pan-y}
-#npcov{position:absolute;inset:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);pointer-events:none}
-#vid,#vidB{position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain;opacity:0;transition:opacity .3s;pointer-events:none}
+
+/* CAPA DO ÁLBUM NO PLAYER */
+#npart{width:min(70vh,40vw);height:min(70vh,40vw);flex-shrink:0;position:relative;border-radius:1.2rem;overflow:hidden;box-shadow:0 2rem 4rem rgba(0,0,0,.5);background:#222;touch-action:pan-y;display:flex;align-items:center;justify-content:center}
+#npcov{position:absolute;inset:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.3);pointer-events:none;z-index:1}
+#vid,#vidB{position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain;opacity:0;transition:opacity .3s;pointer-events:none;z-index:2}
 #vid.show,#vidB.show{opacity:1}
-#npr{flex:1;min-width:0;max-width:32rem;position:relative;z-index:2}.nph{display:flex;align-items:center;gap:1rem}
+
+#npr{flex:1;min-width:0;max-width:32rem;position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center}
+.nph{display:flex;align-items:center;gap:1rem}
 #nt{font-size:1.8rem;font-weight:700;line-height:1.15;letter-spacing:-.03em;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 #na{font-size:1.2rem;color:var(--t2);margin-top:.4rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pr{margin:1.5rem 0 1.2rem}#seek{display:block;width:100%;height:1.5rem;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
+
+/* VISUALIZADOR ISOLADO */
+#viz{width:100%;height:4rem;display:none;margin:.5rem 0;border-radius:.5rem}
+#viz.show{display:block}
+
+.pr{margin:1rem 0 1.2rem}#seek{display:block;width:100%;height:1.5rem;-webkit-appearance:none;appearance:none;background:transparent;cursor:pointer}
 #seek::-webkit-slider-runnable-track{height:.3rem;border-radius:.2rem;background:linear-gradient(90deg,var(--fg) var(--p,0%),rgba(120,120,128,.3) var(--p,0%))}
 #seek::-webkit-slider-thumb{-webkit-appearance:none;width:1.1rem;height:1.1rem;border-radius:50%;background:var(--fg);margin-top:-.4rem;box-shadow:0 .1rem .4rem rgba(0,0,0,.4);transition:transform .1s}#seek::-webkit-slider-thumb:hover{transform:scale(1.2)}
 .tms{display:flex;justify-content:space-between;font-size:.75rem;color:var(--t2);font-variant-numeric:tabular-nums;margin-top:.2rem}
 .ctl{display:flex;align-items:center;justify-content:center;gap:clamp(.5rem,2vw,1.5rem)}.ctl .ci{width:4rem;height:4rem}.ctl .pl{width:5rem;height:5rem}
+
 #np.vmode{padding:0;background:#000;display:block}#np.vmode #npbg{display:none}
 #np.vmode #npart{position:absolute;inset:0;width:auto;height:auto;border-radius:0;box-shadow:none}
 #np.vmode #npr{display:contents}
@@ -87,7 +97,7 @@ body.light #bar{background:rgba(240,240,245,.9);color:#000;box-shadow:0 .4rem 1.
 
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:6.5rem;text-align:center;z-index:99;pointer-events:none;opacity:0;transition:opacity .3s,transform .3s}
 #toast span{display:inline-block;background:#333;color:#fff;font-weight:600;padding:.8rem 1.5rem;border-radius:2rem;font-size:.95rem;box-shadow:0 .4rem 1.5rem rgba(0,0,0,.4)}#toast.show{opacity:1;transform:translateX(-50%) translateY(-.5rem)}
-.lyr{max-height:16rem;overflow-y:auto;margin:1.2rem 0;padding:.8rem 1rem;background:var(--fill);border-radius:.8rem;font-size:1rem;line-height:1.6;color:var(--t2);text-align:center;scroll-behavior:smooth}
+.lyr{max-height:16rem;overflow-y:auto;margin:1.2rem 0;padding:.8rem 1rem;background:var(--fill);border-radius:.8rem;font-size:1rem;line-height:1.6;color:var(--t2);text-align:center;scroll-behavior:smooth;display:none}
 .lyr .cur{color:var(--fg);font-weight:700;font-size:1.1rem;text-shadow:0 0 1rem rgba(255,255,255,.2)}
 .lyr .past{opacity:.4}
 .panel{background:var(--fill);border-radius:1rem;padding:1.2rem 1.5rem;margin-bottom:1.2rem}
@@ -96,7 +106,6 @@ body.light #bar{background:rgba(240,240,245,.9);color:#000;box-shadow:0 .4rem 1.
 .panel select{background:var(--card-solid);color:var(--fg);border:1px solid var(--sep);border-radius:.5rem;padding:.5rem .8rem;font-size:.95rem;outline:none}
 .panel .rowline{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center;margin:.8rem 0}
 .small{font-size:.8rem;color:var(--t2);line-height:1.5}
-#viz{width:100%;height:5rem;display:block;margin:.8rem 0;border-radius:.5rem}
 @media (max-aspect-ratio:1/1){
  #body{flex-direction:column}#nav{width:auto;flex-direction:row;overflow-x:auto;padding:.4rem}.ni{width:auto;padding:0 .8rem;height:2.8rem}.ni svg{margin-right:.5rem}.ni.fs{margin:0 0 0 auto}
  #np:not(.vmode){flex-direction:column;justify-content:center;padding:4rem 1.5rem 1.5rem;gap:1.5rem}#npart{width:min(70vw,40vh);height:min(70vw,40vh)}#npr{width:100%;flex:none}
@@ -140,7 +149,8 @@ body.light #bar{background:rgba(240,240,245,.9);color:#000;box-shadow:0 .4rem 1.
  <div id="npr">
   <div class="nph"><div style="min-width:0;flex:1"><div id="nt"></div><div id="na"></div></div><button class="ib" id="nh" onclick="like(-1)"></button></div>
   <div class="npb">
-   <div class="lyr" id="lyr" style="display:none"></div>
+   <div class="lyr" id="lyr"></div>
+   <canvas id="viz"></canvas>
    <div class="pr"><input type="range" id="seek" min="0" max="100" value="0" step="any"><div class="tms"><span id="tc">0:00</span><span id="td">0:00</span></div></div>
    <div class="ctl">
     <button class="ib" id="nsh" onclick="toggleShuffle()"></button>
@@ -153,6 +163,7 @@ body.light #bar{background:rgba(240,240,245,.9);color:#000;box-shadow:0 .4rem 1.
     <button class="ib" onclick="cycleRate()" id="nrate" style="width:auto;padding:0 .8rem;font-size:.9rem;font-weight:700">1x</button>
     <button class="ib" onclick="toggleAudioProc()" id="nproc" style="width:auto;padding:0 .8rem;font-size:.85rem;font-weight:700">EQ off</button>
     <button class="ib" onclick="openSleepMenu()" id="nsleep" style="width:auto;padding:0 .8rem;font-size:.85rem;font-weight:700">Sleep</button>
+    <button class="ib" onclick="toggleViz()" id="nviz" title="Visualizador"></button>
     <button class="ib" onclick="togglePiP()" id="npip" style="display:none"></button>
    </div>
   </div>
@@ -200,7 +211,7 @@ const toast = m => { $('tmsg').textContent = m; $('toast').className = 'show'; c
 let T = [], IDX = {}, Q = [], qi = -1, shuffle = false, repeat = 1, view = 'home', prevView = 'home', coll = null, libTab = 'mus', filter = '', CTX = [], order = 0, clrArm = 0;
 let likes = ls('likes', {}), recents = ls('recents', []), playlists = ls('playlists', []), stats = ls('stats', {plays:{},time:{}}), theme = ls('theme', 'dark');
 let playlistsDb = [];
-let cfg = ls('cfg', {eq:'off', eqBass:0, eqMid:0, eqTreble:0, crossfade:0, proc:false});
+let cfg = ls('cfg', {eq:'off', eqBass:0, eqMid:0, eqTreble:0, crossfade:0, proc:false, viz:false});
 let lrcCache = {}, coverOverride = ls('coverOverride', {});
 let activeVid = $('vid'), nextVid = $('vidB'), fadeTimer = null;
 let wl = null, seeking = false, sleepTimer = null, sleepTarget = 0, coverTarget = null;
@@ -702,7 +713,7 @@ function playColl() { if(!coll.idx.length) return; Q = coll.idx.slice(); qi = sh
 function playAt(i) { Q = CTX.slice(); qi = Q.indexOf(i); start(); }
 function playOne(i) { Q = T.map((_,k) => k); qi = i; start(); }
 
-// ===== Audio Proc =====
+// ===== Audio Proc (FIXED: Do not destroy context, just bypass) =====
 let actx = null, src = null, srcB = null, chain = null, vizOn = false;
 function applyEq() {
   if(!chain) return;
@@ -712,40 +723,50 @@ function applyEq() {
 }
 async function toggleAudioProc() {
   if(cfg.proc) {
-    try { if(actx) await actx.close(); } catch(e) {}
-    actx = null; src = null; srcB = null; chain = null;
-    cfg.proc = false; saveCfg(); $('nproc').textContent = 'EQ off'; toast('Processamento desligado.'); return;
+    // Desliga sem destruir o actx, apenas desconectando a cadeia
+    try { if(src) src.disconnect(); if(srcB) srcB.disconnect(); } catch(e){}
+    cfg.proc = false; saveCfg(); $('nproc').textContent = 'EQ off';
+    if(vizOn) toggleViz();
+    toast('Processamento desligado.'); return;
   }
   try {
-    actx = new (window.AudioContext||window.webkitAudioContext)();
-    if(actx.state === 'suspended') await actx.resume();
-    src = actx.createMediaElementSource(activeVid); srcB = actx.createMediaElementSource(nextVid);
-    const comp = actx.createDynamicsCompressor();
-    const bass = actx.createBiquadFilter(); bass.type = 'lowshelf'; bass.frequency.value = 200;
-    const mid = actx.createBiquadFilter(); mid.type = 'peaking'; mid.frequency.value = 1000; mid.Q.value = 0.7;
-    const treble = actx.createBiquadFilter(); treble.type = 'highshelf'; treble.frequency.value = 6000;
-    const gain = actx.createGain(); gain.gain.value = 1;
-    const analyser = actx.createAnalyser(); analyser.fftSize = 256;
-    comp.connect(bass); bass.connect(mid); mid.connect(treble); treble.connect(gain); gain.connect(analyser); analyser.connect(actx.destination);
-    chain = {comp,bass,mid,treble,gain,analyser};
+    if(!actx) {
+      actx = new (window.AudioContext||window.webkitAudioContext)();
+      if(actx.state === 'suspended') await actx.resume();
+      src = actx.createMediaElementSource(activeVid); srcB = actx.createMediaElementSource(nextVid);
+      const comp = actx.createDynamicsCompressor();
+      const bass = actx.createBiquadFilter(); bass.type = 'lowshelf'; bass.frequency.value = 200;
+      const mid = actx.createBiquadFilter(); mid.type = 'peaking'; mid.frequency.value = 1000; mid.Q.value = 0.7;
+      const treble = actx.createBiquadFilter(); treble.type = 'highshelf'; treble.frequency.value = 6000;
+      const gain = actx.createGain(); gain.gain.value = 1;
+      const analyser = actx.createAnalyser(); analyser.fftSize = 256;
+      comp.connect(bass); bass.connect(mid); mid.connect(treble); treble.connect(gain); gain.connect(analyser); analyser.connect(actx.destination);
+      chain = {comp,bass,mid,treble,gain,analyser};
+    }
     applyEq();
     src.connect(chain.comp); srcB.connect(chain.comp);
-    cfg.proc = true; saveCfg(); $('nproc').textContent = 'EQ on'; toast('Processamento de áudio ligado.');
+    cfg.proc = true; saveCfg(); $('nproc').textContent = 'EQ on'; toast('Processamento ligado.');
   } catch(e) { toast('Falha no processamento.'); cfg.proc = false; saveCfg(); }
 }
-function startViz() {
-  if(!chain || !chain.analyser) return;
-  const cvs = document.createElement('canvas'); cvs.id = 'viz';
-  $('npr').insertBefore(cvs, $('npr').querySelector('.npb')); vizOn = true;
-  const an = chain.analyser, ctx = cvs.getContext('2d'), buf = new Uint8Array(an.frequencyBinCount);
-  function draw() {
-    if(!vizOn) { cvs.remove(); return; }
-    an.getByteFrequencyData(buf); ctx.clearRect(0,0,cvs.width,cvs.height);
-    const w = cvs.width/buf.length*2;
-    for(let i=0;i<buf.length;i++) { const v = buf[i]/255; ctx.fillStyle = 'rgba(29,185,84,'+v+')'; ctx.fillRect(i*w, cvs.height*(1-v), w-1, cvs.height*v); }
-    requestAnimationFrame(draw);
+function toggleViz() {
+  vizOn = !vizOn; cfg.viz = vizOn; saveCfg();
+  const cvs = $('viz');
+  if(vizOn) {
+    if(!cfg.proc) { toast('Ligue o EQ para ver o visualizador.'); vizOn = false; return; }
+    if(!chain) return;
+    cvs.classList.add('show');
+    const an = chain.analyser, ctx = cvs.getContext('2d'), buf = new Uint8Array(an.frequencyBinCount);
+    function draw() {
+      if(!vizOn || !cvs.classList.contains('show')) return;
+      an.getByteFrequencyData(buf); ctx.clearRect(0,0,cvs.width,cvs.height);
+      const w = cvs.width/buf.length*2;
+      for(let i=0;i<buf.length;i++) { const v = buf[i]/255; ctx.fillStyle = 'rgba(29,185,84,'+v+')'; ctx.fillRect(i*w, cvs.height*(1-v), w-1, cvs.height*v); }
+      requestAnimationFrame(draw);
+    }
+    cvs.width = cvs.clientWidth*devicePixelRatio; cvs.height = cvs.clientHeight*devicePixelRatio; draw();
+  } else {
+    cvs.classList.remove('show');
   }
-  cvs.width = cvs.clientWidth*devicePixelRatio; cvs.height = cvs.clientHeight*devicePixelRatio; draw();
 }
 
 // ===== Vídeo Eventos =====
@@ -798,6 +819,7 @@ function upd() {
   if('mediaSession' in navigator && window.MediaMetadata) navigator.mediaSession.metadata = new MediaMetadata({title:t.title, artist:artistOf(t), album:albumOf(t), artwork:t.cover ? [{src:t.cover, sizes:'360x360'}] : []});
   $('nrate').textContent = activeVid.playbackRate+'x'; $('nproc').textContent = cfg.proc ? 'EQ on' : 'EQ off';
   $('nsleep').textContent = sleepTimer ? 'Sleep '+Math.ceil((sleepTarget-Date.now())/60000)+'m' : 'Sleep';
+  $('nviz').innerHTML = ic('eq','1.8rem'); $('nviz').style.color = vizOn ? 'var(--ac)' : '';
 }
 async function wake() { try { if(!navigator.wakeLock) return; if(!activeVid.paused && !wl) { wl = await navigator.wakeLock.request('screen'); wl.onrelease = () => wl = null; } else if(activeVid.paused && wl) { await wl.release(); wl = null; } } catch(e) {} }
 function sync() { document.body.className = (theme==='light'?'light ':'') + ((!activeVid.paused && !activeVid.ended) ? 'playing' : ''); if('mediaSession' in navigator) navigator.mediaSession.playbackState = activeVid.paused ? 'paused' : 'playing'; wake(); }
@@ -812,7 +834,7 @@ function openSettings() {
     + `<label>Bass <input type="range" min="-12" max="12" value="${cfg.eqBass}" oninput="cfg.eqBass=+this.value;saveCfg();applyEq()"></label>`
     + `<label>Mid <input type="range" min="-12" max="12" value="${cfg.eqMid}" oninput="cfg.eqMid=+this.value;saveCfg();applyEq()"></label>`
     + `<label>Treble <input type="range" min="-12" max="12" value="${cfg.eqTreble}" oninput="cfg.eqTreble=+this.value;saveCfg();applyEq()"></label>`
-    + '<div class="rowline"><button class="btn2" onclick="toggleAudioProc()">'+(cfg.proc?'Desligar proc.':'Ligar proc.')+'</button><button class="btn2" onclick="startViz()">Visualizador</button></div></div>';
+    + '<div class="rowline"><button class="btn2" onclick="toggleAudioProc()">'+(cfg.proc?'Desligar proc.':'Ligar proc.')+'</button><button class="btn2" onclick="toggleViz()">Visualizador</button></div></div>';
   h += '<div class="panel"><div class="small">Aparência</div><div class="rowline"><button class="btn2" onclick="theme=\'dark\';sv(\'theme\',theme);applyTheme();render();sync()">Escuro</button><button class="btn2" onclick="theme=\'light\';sv(\'theme\',theme);applyTheme();render();sync()">Claro</button></div></div>';
   h += '<div class="panel"><div class="small">Biblioteca</div><div class="rowline"><button class="btn2" onclick="exportLib()">Exportar JSON</button><button class="btn2" onclick="importLib()">Importar JSON</button><button class="btn2" onclick="openRecorder()">Gravador</button></div></div>';
   h += '<div class="panel"><div class="small">Dados</div><button class="btn2" onclick="clearLib()">Limpar biblioteca</button></div>';
