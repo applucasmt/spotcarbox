@@ -3,18 +3,19 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="theme-color" content="#000000"><meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json"><link rel="icon" href="icon-192.png">
-<title>SpotCar Box</title>
+<title>CarPlay Box Music</title>
 <style>
 :root{--ac:#1DB954;--card:rgba(28,28,30,.94);--sep:rgba(255,255,255,.08);--t2:rgba(235,235,245,.6);--fill:rgba(120,120,128,.24)}
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text",Inter,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;-webkit-user-select:none;user-select:none}
 html{font-size:clamp(10px,min(3.3vh,2.1vw),17px)}
 html,body{width:100%;height:100%;background:#000;color:#fff;overflow:hidden;overscroll-behavior:none}
 ::-webkit-scrollbar{display:none}button{border:0;background:none;color:inherit;cursor:pointer;font-size:inherit}svg{display:block;flex-shrink:0}.hidden{display:none!important}
+button:focus-visible,.row:focus-visible,.tile:focus-visible,.card:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
 #app{position:fixed;inset:0;background:radial-gradient(90% 70% at 15% 0%,rgba(29,185,84,.16),transparent 60%),#000}
 #body{position:absolute;inset:0 0 5.7rem 0;display:flex;padding:.6rem .6rem 0;gap:.6rem}
-#nav{width:11.4rem;background:var(--card);border-radius:1.1rem;padding:.6rem;flex-shrink:0;display:flex;flex-direction:column;gap:.15rem;overflow-y:auto}
+#nav{width:10.8rem;background:var(--card);border-radius:1.1rem;padding:.6rem;flex-shrink:0;display:flex;flex-direction:column;gap:.15rem;overflow-y:auto}
 .ni{display:flex;align-items:center;width:100%;height:3rem;padding:0 .8rem;color:var(--t2);font-size:.95rem;font-weight:600;border-radius:.8rem;text-align:left;white-space:nowrap}
-.ni .nv{width:1.55rem;height:1.55rem;margin-right:.7rem;transition:color .2s}.ni.on{background:var(--fill);color:#fff}.ni.on svg{color:var(--ac)}.ni:active{background:var(--fill)}.ni.fs{margin-top:auto}
+.ni svg{margin-right:.7rem}.ni.on{background:var(--fill);color:#fff}.ni.on svg{color:var(--ac)}.ni:active{background:var(--fill)}.ni.fs{margin-top:auto}
 #main{flex:1;min-width:0;background:var(--card);border-radius:1.1rem;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:1.2rem 1.3rem 1.6rem}
 h1{font-size:2rem;font-weight:700;letter-spacing:-.03em;margin-bottom:.9rem;line-height:1.1}
 h2{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin:1.5rem 0 .7rem}
@@ -26,29 +27,29 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin:1.5rem 0 .7rem}
 .tile:active{background:rgba(120,120,128,.4)}.tile .cv{border-radius:0;box-shadow:none}.tile span{padding:0 .8rem;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .hs{display:flex;gap:1rem;overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -1.3rem;padding:0 1.3rem}
 .card{width:8.4rem;flex-shrink:0;min-width:0}.card .cv{border-radius:.8rem}.card .t1{margin-top:.55rem}
-.row{display:flex;align-items:center;height:4.2rem;padding:0 .5rem;border-radius:.8rem;gap:.85rem}
+.row{display:flex;align-items:center;height:4.2rem;padding:0 .5rem;border-radius:.8rem;gap:.85rem;cursor:pointer}
 .row:active{background:var(--fill)}.rt{flex:1;min-width:0}.row.on .t1{color:var(--ac)}
 .hb{width:3.2rem;height:3.2rem;color:var(--t2);display:flex;align-items:center;justify-content:center;flex-shrink:0}.hb.on{color:var(--ac)}
-.chips{display:flex;gap:.5rem;margin-bottom:.9rem;overflow-x:auto}.chip{background:var(--fill);border-radius:2rem;padding:.55rem 1.1rem;font-size:.88rem;font-weight:600;white-space:nowrap}.chip.on{background:#fff;color:#000}
+.chips{display:flex;gap:.5rem;margin-bottom:.9rem;overflow-x:auto}.chip{background:var(--fill);border-radius:2rem;padding:.55rem 1.1rem;font-size:.88rem;font-weight:600;white-space:nowrap;cursor:pointer}.chip.on{background:#fff;color:#000}
 .hd{display:flex;align-items:flex-end;gap:1.3rem;padding:.2rem 0 1.1rem}.hd .cv{border-radius:.9rem;box-shadow:0 .6rem 1.8rem rgba(0,0,0,.55)}
 .hd .k{font-size:.72rem;font-weight:600;letter-spacing:.08em;color:var(--t2)}.hd .big{font-size:2.1rem;font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:.25rem 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .acts{display:flex;align-items:center;gap:.7rem;margin-bottom:.9rem;flex-wrap:wrap}
 .pbig{width:3.6rem;height:3.6rem;border-radius:50%;background:var(--ac);color:#000;display:flex;align-items:center;justify-content:center;box-shadow:0 .3rem 1rem rgba(29,185,84,.4)}.pbig:active{opacity:.85}
 .ib{width:3.1rem;height:3.1rem;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.65);flex-shrink:0}.ib.on{color:var(--ac)}
 .btn{display:inline-flex;align-items:center;gap:.5rem;background:#fff;color:#000;border-radius:2rem;padding:.75rem 1.3rem;font-weight:600;font-size:.92rem}.btn:active{opacity:.8}
-.btn2{background:var(--fill);border-radius:2rem;padding:.75rem 1.2rem;font-size:.9rem;font-weight:600}
+.btn2{background:var(--fill);border-radius:2rem;padding:.75rem 1.2rem;font-size:.9rem;font-weight:600;cursor:pointer}
 #q{width:100%;height:3rem;border-radius:.9rem;border:0;background:var(--fill);color:#fff;font-size:1rem;padding:0 1.1rem;margin-bottom:.9rem;-webkit-user-select:text;user-select:text;outline:0}#q::placeholder{color:var(--t2)}
 .empty{text-align:center;color:var(--t2);padding:2rem 1rem;font-size:1rem;line-height:1.45}.empty .acts{justify-content:center;margin-top:1rem}
 .tip{font-size:.82rem;color:var(--t2);max-width:30rem;margin:.7rem auto 0;line-height:1.45}
 #bar{position:absolute;left:.6rem;right:.6rem;bottom:.6rem;height:4.4rem;border-radius:1.2rem;background:rgba(58,58,60,.82);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);display:flex;align-items:center;padding:0 .7rem;gap:.1rem;overflow:hidden;box-shadow:0 .5rem 1.6rem rgba(0,0,0,.5),inset 0 0 0 1px rgba(255,255,255,.08)}
 #bpb,#bp{position:absolute;left:0;bottom:0;height:.2rem}#bpb{right:0;background:rgba(255,255,255,.12)}#bp{background:#fff;width:0}
-#bi{flex:1;min-width:0;display:flex;align-items:center;gap:.8rem}
+#bi{flex:1;min-width:0;display:flex;align-items:center;gap:.8rem;cursor:pointer}
 .ci{width:3.2rem;height:3.2rem;display:flex;align-items:center;justify-content:center;color:#fff;border-radius:50%;flex-shrink:0}.ci:active{background:rgba(255,255,255,.18)}
 .pl{width:3.6rem;height:3.6rem;background:#fff;color:#000}#bar .pl{background:none;color:#fff}.ic-pa{display:none}body.playing .ic-pa{display:block}body.playing .ic-pl{display:none}
 #np{position:fixed;inset:0;z-index:40;background:#000;transform:translateY(100%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;align-items:center;justify-content:center;padding:0 3rem;gap:3rem}
 #np.open{transform:none}#npbg{position:absolute;inset:-3rem;z-index:-1;filter:blur(2.8rem) saturate(1.6)}
 #npdown{position:absolute;top:.7rem;left:.8rem;width:3.3rem;height:3.3rem;border-radius:50%;background:rgba(255,255,255,.16);color:#fff;z-index:3;display:flex;align-items:center;justify-content:center}
-#npart{width:min(68vh,38vw);height:min(68vh,38vw);flex-shrink:0;position:relative;border-radius:1.1rem;overflow:hidden;box-shadow:0 1.6rem 3.5rem rgba(0,0,0,.55);background:#222}
+#npart{width:min(68vh,38vw);height:min(68vh,38vw);flex-shrink:0;position:relative;border-radius:1.1rem;overflow:hidden;box-shadow:0 1.6rem 3.5rem rgba(0,0,0,.55);background:#222;touch-action:pan-y}
 #npcov{position:absolute;inset:0;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.4)}
 #vid{position:absolute;inset:0;width:100%;height:100%;background:#000;object-fit:contain;opacity:0}#vid.show{opacity:1}
 #npr{flex:1;min-width:0;max-width:30rem}.nph{display:flex;align-items:center;gap:.8rem}
@@ -77,34 +78,34 @@ h2{font-size:1.2rem;font-weight:700;letter-spacing:-.02em;margin:1.5rem 0 .7rem}
 <input type="file" id="fd" multiple webkitdirectory class="hidden">
 <div id="app">
  <div id="body">
-  <div id="nav">
+  <div id="nav" role="navigation" aria-label="Navegação principal">
    <button class="ni" id="n-home" onclick="go('home')"></button>
    <button class="ni" id="n-search" onclick="go('search')"></button>
    <button class="ni" id="n-lib" onclick="go('lib')"></button>
    <button class="ni" id="n-local" onclick="go('local')"></button>
    <button class="ni fs" id="n-fs" onclick="toggleFS()"></button>
   </div>
-  <div id="main"></div>
+  <div id="main" role="main"></div>
  </div>
  <div id="bar" class="hidden"><div id="bpb"></div><div id="bp"></div>
   <div id="bi" onclick="openNP()"><div id="bc"></div><div style="min-width:0"><div class="t1" id="bt"></div><div class="t2" id="ba"></div></div></div>
-  <button class="ci" id="bh" onclick="like(-1)"></button>
-  <button class="ci" onclick="prev()" id="bprev"></button>
-  <button class="ci pl" onclick="toggle()"><span class="ic-pl" id="bpl"></span><span class="ic-pa" id="bpa"></span></button>
-  <button class="ci" onclick="next()" id="bnext"></button>
+  <button class="ci" id="bh" onclick="like(-1)" aria-label="Curtir faixa atual"></button>
+  <button class="ci" onclick="prev()" id="bprev" aria-label="Faixa anterior"></button>
+  <button class="ci pl" onclick="toggle()" aria-label="Reproduzir ou pausar"><span class="ic-pl" id="bpl"></span><span class="ic-pa" id="bpa"></span></button>
+  <button class="ci" onclick="next()" id="bnext" aria-label="Próxima faixa"></button>
  </div>
 </div>
-<div id="np"><div id="npbg"></div>
- <button id="npdown" onclick="closeNP()"></button>
+<div id="np" role="dialog" aria-label="Tocando agora"><div id="npbg"></div>
+ <button id="npdown" onclick="closeNP()" aria-label="Fechar"></button>
  <div id="npart" onclick="tapVideo()"><div id="npcov"></div><video id="vid" playsinline></video></div>
  <div id="npr">
-  <div class="nph"><div style="min-width:0;flex:1"><div id="nt"></div><div id="na"></div></div><button class="ib" id="nh" onclick="like(-1)"></button></div>
-  <div class="npb"><div class="pr"><input type="range" id="seek" min="0" max="100" value="0" step="any"><div class="tms"><span id="tc">0:00</span><span id="td">0:00</span></div></div>
-   <div class="ctl"><button class="ib" id="nsh" onclick="toggleShuffle()"></button><button class="ci" onclick="prev()" id="nprev"></button>
-    <button class="ci pl" onclick="toggle()"><span class="ic-pl" id="npl"></span><span class="ic-pa" id="npa"></span></button>
-    <button class="ci" onclick="next()" id="nnext"></button><button class="ib" id="nrp" onclick="toggleRepeat()"></button></div></div>
+  <div class="nph"><div style="min-width:0;flex:1"><div id="nt"></div><div id="na"></div></div><button class="ib" id="nh" onclick="like(-1)" aria-label="Curtir faixa atual"></button></div>
+  <div class="npb"><div class="pr"><input type="range" id="seek" min="0" max="100" value="0" step="any" aria-label="Progresso da faixa"><div class="tms"><span id="tc">0:00</span><span id="td">0:00</span></div></div>
+   <div class="ctl"><button class="ib" id="nsh" onclick="toggleShuffle()" aria-label="Aleatório"></button><button class="ci" onclick="prev()" id="nprev" aria-label="Faixa anterior"></button>
+    <button class="ci pl" onclick="toggle()" aria-label="Reproduzir ou pausar"><span class="ic-pl" id="npl"></span><span class="ic-pa" id="npa"></span></button>
+    <button class="ci" onclick="next()" id="nnext" aria-label="Próxima faixa"></button><button class="ib" id="nrp" onclick="toggleRepeat()" aria-label="Repetir"></button></div></div>
  </div></div>
-<div id="toast"><span id="tmsg"></span></div>
+<div id="toast" role="status" aria-live="polite"><span id="tmsg"></span></div>
 <script>
 const P={home:'M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3z',search:'M15.5 14h-.8l-.3-.3A6.5 6.5 0 1 0 14 15.5l.3.3v.8l5 5 1.5-1.5-5-5zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z',lib:'M4 4h2v16H4zM8 4h2v16H8zM12.5 5.2l1.9-.6 4.4 15-1.9.6z',
 heart:'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z',
@@ -115,19 +116,12 @@ rep:'M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z',down:'M7.4
 note:'M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6z',vid:'M17 10.5V7a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-3.5l4 4v-11l-4 4z',
 plus:'M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z',folder:'M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z',
 fs:'M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z'};
-const ic=(n,s)=>`<svg viewBox="0 0 24 24" style="width:${s};height:${s}" fill="currentColor"><path d="${P[n]}"/></svg>`;
-const N={
-home:'<path d="M4 10.5L12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/>',
-search:'<circle cx="10.5" cy="10.5" r="6.3"/><path d="M15.3 15.3L20 20"/>',
-lib:'<rect x="3.5" y="4" width="3.6" height="16" rx="1.2"/><rect x="9.3" y="4" width="3.6" height="16" rx="1.2"/><path d="M15.4 6.2l3.3-.9 3.2 13.6-3.3.9z"/>',
-local:'<path d="M3.5 7.5a2 2 0 0 1 2-2h3.6a2 2 0 0 1 1.4.6l1.2 1.2a2 2 0 0 0 1.4.6h5.4a2 2 0 0 1 2 2v7.6a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2z"/>',
-fs:'<path d="M4 9V6a2 2 0 0 1 2-2h3M15 4h3a2 2 0 0 1 2 2v3M20 15v3a2 2 0 0 1-2 2h-3M9 20H6a2 2 0 0 1-2-2v-3"/>'};
-const NL={home:'Início',search:'Buscar',lib:'Biblioteca',local:'Arquivos locais'};
-const nic=(n,on)=>`<svg class="nv" viewBox="0 0 24 24" fill="${on&&n!=='search'&&n!=='fs'?'currentColor':'none'}" stroke="currentColor" stroke-width="${on&&n==='search'?2.3:1.7}" stroke-linecap="round" stroke-linejoin="round">${N[n]}</svg>`;
+const ic=(n,s)=>`<svg viewBox="0 0 24 24" style="width:${s};height:${s}" fill="currentColor" aria-hidden="true"><path d="${P[n]}"/></svg>`;
 const $=i=>document.getElementById(i);
 const ls=(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}};
 const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
 const fmt=t=>{if(!isFinite(t)||t<0)return '0:00';const m=Math.floor(t/60),s=Math.floor(t%60);return m+':'+(s<10?'0':'')+s};
 const grad=n=>{let h=0;for(let i=0;i<n.length;i++)h=n.charCodeAt(i)+((h<<5)-h);const a=Math.abs(h)%360;return `linear-gradient(135deg,hsl(${a},50%,34%),hsl(${(a+50)%360},60%,18%))`};
 let tt;const toast=m=>{$('tmsg').textContent=m;$('toast').className='show';clearTimeout(tt);tt=setTimeout(()=>$('toast').className='',3200)};
@@ -143,7 +137,7 @@ const artistOf=t=>t.artist||'Artista desconhecido',albumOf=t=>t.album||t.folder|
 // ===== Biblioteca salva no aparelho (IndexedDB) =====
 const idb=new Promise((res,rej)=>{if(!window.indexedDB)return rej();const r=indexedDB.open('cpbox',2);r.onupgradeneeded=()=>{const d=r.result;if(!d.objectStoreNames.contains('m'))d.createObjectStore('m',{keyPath:'id'});if(!d.objectStoreNames.contains('x'))d.createObjectStore('x',{keyPath:'id'})};r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
 const dbDo=(mode,fn)=>idb.then(db=>new Promise((res,rej)=>{const tx=db.transaction(['m','x'],mode);fn(tx.objectStore('m'),tx.objectStore('x'));tx.oncomplete=()=>res();tx.onerror=tx.onabort=()=>rej(tx.error)}));
-const fail=()=>toast('Sem espaço para salvar na biblioteca.');
+const fail=e=>{const q=e&&e.name==='QuotaExceededError';toast(q?'Sem espaço no aparelho. Limpe a biblioteca ou remova arquivos grandes.':'Sem espaço para salvar na biblioteca.')};
 const dbPut=t=>dbDo('readwrite',(m,x)=>{m.put({id:t.id,type:t.type,size:t.size,order:t.order,file:t.file,folder:t.folder});x.put({id:t.id,title:t.title,artist:t.artist,album:t.album,cover:t.coverBlob,color:t.color})}).catch(fail);
 const dbMeta=t=>dbDo('readwrite',(m,x)=>x.put({id:t.id,title:t.title,artist:t.artist,album:t.album,cover:t.coverBlob,color:t.color})).catch(()=>{});
 const getAll=s=>new Promise(res=>{const r=s.getAll();r.onsuccess=()=>res(r.result||[]);r.onerror=()=>res([])});
@@ -206,6 +200,11 @@ $('fi').onchange=e=>{addFiles(e.target.files);e.target.value=''};$('fd').onchang
 async function restore(){const a=(await dbAll()).sort((x,y)=>x.order-y.order);
  for(const r of a){const t={id:r.id,type:r.type,file:r.file,size:r.size,order:r.order,title:r.title,artist:r.artist,album:r.album,folder:r.folder,color:r.color||'',coverBlob:r.cover||null,url:URL.createObjectURL(r.file),cover:r.cover?URL.createObjectURL(r.cover):''};
   IDX[t.id]=T.length;T.push(t);order=Math.max(order,t.order+1)}
+ // limpa órfãos de curtidas e recentes
+ const ids=new Set(T.map(t=>t.id));
+ let dirty=false;Object.keys(likes).forEach(k=>{if(!ids.has(k)){delete likes[k];dirty=true}});
+ const rc=recents.filter(id=>ids.has(id));if(rc.length!==recents.length){recents=rc;dirty=true}
+ if(dirty){sv('likes',likes);sv('recents',recents)}
  const l=ls('last',null);if(l&&IDX[l]!==undefined){Q=T.map((_,i)=>i);qi=IDX[l];upd()}render()}
 function clearLib(){if(!clrArm){clrArm=1;$('clr').textContent='Tem certeza?';setTimeout(()=>{clrArm=0;if($('clr'))$('clr').textContent='Limpar'},3000);return}
  clrArm=0;vid.pause();vid.removeAttribute('src');vid.load();T.forEach(t=>{URL.revokeObjectURL(t.url);t.cover&&URL.revokeObjectURL(t.cover)});
@@ -225,11 +224,11 @@ function groups(key){const m={},o=[];T.forEach((t,i)=>{if(t.type!=='audio'&&key!
  return o.sort((a,b)=>a.name.toLowerCase()<b.name.toLowerCase()?-1:1)}
 const likedIdx=()=>T.map((t,i)=>likes[t.id]?i:-1).filter(i=>i>-1),ofType=ty=>T.map((t,i)=>t.type===ty?i:-1).filter(i=>i>-1);
 function row(i){const t=T[i],on=cur()===t;
- return `<div class="row${on?' on':''}" onclick="playAt(${i})">${cov(t,3)}<div class="rt"><div class="t1">${esc(t.title)}</div><div class="t2">${esc(artistOf(t))}${t.type==='video'?' · Vídeo':''}</div></div><button class="hb${likes[t.id]?' on':''}" onclick="event.stopPropagation();like(${i})">${ic(likes[t.id]?'heart':'heartO','1.5rem')}</button></div>`}
+ return `<div class="row${on?' on':''}" tabindex="0" onclick="playAt(${i})" onkeydown="if(event.key==='Enter')playAt(${i})">${cov(t,3)}<div class="rt"><div class="t1">${esc(t.title)}</div><div class="t2">${esc(artistOf(t))}${t.type==='video'?' · Vídeo':''}</div></div><button class="hb${likes[t.id]?' on':''}" aria-label="Curtir ${esc(t.title)}" onclick="event.stopPropagation();like(${i})">${ic(likes[t.id]?'heart':'heartO','1.5rem')}</button></div>`}
 const rows=a=>{CTX=a;return a.map(row).join('')||'<div class="empty">Nada por aqui ainda.</div>'};
-const grow=(kind,i,g)=>`<div class="row" onclick="openGroup('${kind}',${i})">${cov(g.c,3.4,kind==='artist')}<div class="rt"><div class="t1">${esc(g.name)}</div><div class="t2">${{artist:'Artista',album:'Álbum',folder:'Pasta'}[kind]} · ${g.idx.length} itens</div></div></div>`;
-const card=(c,a,b,fn)=>`<div class="card" onclick="${fn}">${c}<div class="t1">${esc(a)}</div><div class="t2">${esc(b)}</div></div>`;
-const tile=(c,n,fn)=>`<div class="tile" onclick="${fn}">${c}<span>${esc(n)}</span></div>`;
+const grow=(kind,i,g)=>`<div class="row" tabindex="0" onclick="openGroup('${kind}',${i})" onkeydown="if(event.key==='Enter')openGroup('${kind}',${i})">${cov(g.c,3.4,kind==='artist')}<div class="rt"><div class="t1">${esc(g.name)}</div><div class="t2">${{artist:'Artista',album:'Álbum',folder:'Pasta'}[kind]} · ${g.idx.length} itens</div></div></div>`;
+const card=(c,a,b,fn)=>`<div class="card" tabindex="0" onclick="${fn}" onkeydown="if(event.key==='Enter')${fn}">${c}<div class="t1">${esc(a)}</div><div class="t2">${esc(b)}</div></div>`;
+const tile=(c,n,fn)=>`<div class="tile" tabindex="0" onclick="${fn}" onkeydown="if(event.key==='Enter')${fn}">${c}<span>${esc(n)}</span></div>`;
 function rHome(){const h=new Date().getHours(),g=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';let o=`<h1>${g}</h1>`;
  if(!T.length)return o+emptyBox();const al=groups('album');
  o+='<div class="tiles">'+tile(likeCov(3.6),'Músicas curtidas','openLikes()')+tile(cov(T[0],3.6),'Arquivos locais',"go('local')")+tile(cov(T[ofType('video')[0]]||{title:'v',type:'video'},3.6),'Vídeos',"openAll('video')");
@@ -238,23 +237,23 @@ function rHome(){const h=new Date().getHours(),g=h<12?'Bom dia':h<18?'Boa tarde'
  if(rc.length)o+='<h2>Tocadas recentemente</h2><div class="hs">'+rc.map(i=>card(cov(T[i],8.4),T[i].title,artistOf(T[i]),`playOne(${i})`)).join('')+'</div>';
  if(al.length)o+='<h2>Seus álbuns</h2><div class="hs">'+al.slice(0,12).map((a,i)=>card(cov(a.c,8.4),a.name,'Álbum',`openGroup('album',${i})`)).join('')+'</div>';
  return o}
-const rSearch=()=>`<h1>Buscar</h1><input id="q" type="text" placeholder="O que você quer ouvir?" value="${esc(filter)}" oninput="doSearch(this.value)"><div id="sres">${sres()}</div>`;
-function sres(){const f=filter.toLowerCase();if(!f)return '<div class="empty">Busque por música, artista, álbum ou vídeo.</div>';
- const o=[];for(let i=0;i<T.length&&o.length<60;i++){const t=T[i];if((t.title+' '+artistOf(t)+' '+albumOf(t)).toLowerCase().includes(f))o.push(i)}
+const rSearch=()=>`<h1>Buscar</h1><input id="q" type="text" placeholder="O que você quer ouvir?" value="${esc(filter)}" oninput="doSearch(this.value)" aria-label="Buscar"><div id="sres">${sres()}</div>`;
+function sres(){const f=norm(filter);if(!f)return '<div class="empty">Busque por música, artista, álbum ou vídeo.</div>';
+ const o=[];for(let i=0;i<T.length&&o.length<60;i++){const t=T[i];if(norm(t.title+' '+artistOf(t)+' '+albumOf(t)).includes(f))o.push(i)}
  return o.length?rows(o):`<div class="empty">Nada encontrado para "${esc(filter)}".</div>`}
 const doSearch=v=>{filter=v;$('sres').innerHTML=sres()};
 function rLib(){const tabs=[['mus','Músicas'],['vid','Vídeos'],['artist','Artistas'],['album','Álbuns'],['folder','Pastas']];
- let h='<h1>Sua Biblioteca</h1><div class="chips">'+tabs.map(t=>`<div class="chip${libTab===t[0]?' on':''}" onclick="libTab='${t[0]}';render()">${t[1]}</div>`).join('')+'</div>';
- h+=`<div class="row" onclick="openLikes()">${likeCov(3.4)}<div class="rt"><div class="t1">Músicas curtidas</div><div class="t2">Playlist · ${likedIdx().length} itens</div></div></div>`;
- h+=`<div class="row" onclick="go('local')"><div class="cv" style="width:3.4rem;height:3.4rem;background:#2a2a2a;color:#fff">${ic('folder','1.6rem')}</div><div class="rt"><div class="t1">Arquivos locais</div><div class="t2">${T.length} itens neste aparelho</div></div></div>`;
+ let h='<h1>Sua Biblioteca</h1><div class="chips">'+tabs.map(t=>`<div class="chip${libTab===t[0]?' on':''}" tabindex="0" onclick="libTab='${t[0]}';render()" onkeydown="if(event.key==='Enter'){libTab='${t[0]}';render()}">${t[1]}</div>`).join('')+'</div>';
+ h+=`<div class="row" tabindex="0" onclick="openLikes()" onkeydown="if(event.key==='Enter')openLikes()">${likeCov(3.4)}<div class="rt"><div class="t1">Músicas curtidas</div><div class="t2">Playlist · ${likedIdx().length} itens</div></div></div>`;
+ h+=`<div class="row" tabindex="0" onclick="go('local')" onkeydown="if(event.key==='Enter')go('local')"><div class="cv" style="width:3.4rem;height:3.4rem;background:#2a2a2a;color:#fff">${ic('folder','1.6rem')}</div><div class="rt"><div class="t1">Arquivos locais</div><div class="t2">${T.length} itens neste aparelho</div></div></div>`;
  if(!T.length)return h;if(libTab==='mus')return h+rows(ofType('audio'));if(libTab==='vid')return h+rows(ofType('video'));
  return h+groups(libTab).map((g,i)=>grow(libTab,i,g)).join('')}
 const rLocal=()=>`<h1>Arquivos locais</h1><div class="acts">${addBtns()}${T.length?'<button class="btn2" id="clr" onclick="clearLib()">Limpar</button>':''}</div>`+(T.length?`<div class="t2" style="margin:0 0 .6rem">${T.length} itens neste aparelho</div>`+rows(T.map((_,i)=>i))+tip():emptyBox());
 function rColl(){const c=coll;let h=`<div class="hd">${c.like?likeCov(9):cov(c.cover,9,c.round)}<div style="min-width:0"><div class="k">${c.kind}</div><div class="big">${esc(c.title)}</div><div class="t2">${c.idx.length} itens</div></div></div>`;
- h+=`<div class="acts"><button class="pbig" onclick="playColl()">${ic('play','1.9rem')}</button><button class="ib${shuffle?' on':''}" onclick="toggleShuffle();render(true)">${ic('shuf','1.7rem')}</button></div>`;return h+rows(c.idx)}
+ h+=`<div class="acts"><button class="pbig" onclick="playColl()" aria-label="Reproduzir">${ic('play','1.9rem')}</button><button class="ib${shuffle?' on':''}" onclick="toggleShuffle();render(true)" aria-label="Aleatório">${ic('shuf','1.7rem')}</button></div>`;return h+rows(c.idx)}
 function render(keep){const m=$('main'),st=keep?m.scrollTop:0;
  m.innerHTML=({home:rHome,search:rSearch,lib:rLib,local:rLocal,coll:rColl})[view]();m.scrollTop=st;
- const v=view==='coll'?prevView:view;['home','search','lib','local'].forEach(n=>{const b=$('n-'+n);b.className='ni'+(v===n?' on':'');b.innerHTML=nic(n,v===n)+NL[n]})}
+ const v=view==='coll'?prevView:view;['home','search','lib','local'].forEach(n=>$('n-'+n).className='ni'+(v===n?' on':''))}
 const go=v=>{view=v;coll=null;render()};
 function openColl(c){prevView=view==='coll'?prevView:view;coll=c;view='coll';render()}
 function openGroup(k,i){const g=groups(k)[i];openColl({kind:{artist:'ARTISTA',album:'ÁLBUM',folder:'PASTA'}[k],title:g.name,idx:g.idx,cover:g.c,round:k==='artist'})}
@@ -270,8 +269,8 @@ function start(){const t=cur();if(!t)return;vid.src=t.url;const p=vid.play();if(
 function toggle(){if(!cur())return;if(!vid.getAttribute('src'))return start();vid.paused?vid.play():vid.pause()}
 function next(){const n=Q.length;if(!n)return;if(shuffle&&n>1){let k=qi;while(k===qi)k=Math.floor(Math.random()*n);qi=k}else qi=(qi+1)%n;start()}
 function prev(){if(!Q.length)return;if(vid.currentTime>3){vid.currentTime=0;return}qi=qi===0?Q.length-1:qi-1;start()}
-function toggleShuffle(){shuffle=!shuffle;$('nsh').style.color=shuffle?'#1DB954':''}
-function toggleRepeat(){repeat=(repeat+1)%3;$('nrp').style.color=repeat?'#1DB954':'';toast(['Repetir: desligado','Repetir: tudo','Repetir: uma faixa'][repeat])}
+function toggleShuffle(){shuffle=!shuffle;$('nsh').style.color=shuffle?'#1DB954':'';$('nsh').classList.toggle('on',shuffle)}
+function toggleRepeat(){repeat=(repeat+1)%3;$('nrp').style.color=repeat?'#1DB954':'';$('nrp').classList.toggle('on',!!repeat);toast(['Repetir: desligado','Repetir: tudo','Repetir: uma faixa'][repeat])}
 function like(i){const t=i<0?cur():T[i];if(!t)return;likes[t.id]?delete likes[t.id]:likes[t.id]=1;sv('likes',likes);upd();render(true)}
 
 // ===== Tela "Tocando agora" =====
@@ -291,13 +290,24 @@ function upd(){const t=cur();if(!t)return;$('bar').className='';
 let wl=null;async function wake(){try{if(!navigator.wakeLock)return;if(!vid.paused&&!wl){wl=await navigator.wakeLock.request('screen');wl.onrelease=()=>wl=null}else if(vid.paused&&wl){await wl.release();wl=null}}catch(e){}}
 function sync(){document.body.className=(!vid.paused&&!vid.ended)?'playing':'';if('mediaSession' in navigator)navigator.mediaSession.playbackState=vid.paused?'paused':'playing';wake()}
 vid.onplay=()=>{sync();showUI()};vid.onpause=()=>{sync();showUI()};
-vid.onended=()=>{sync();if(repeat===2){vid.currentTime=0;vid.play()}else if(repeat===0&&!shuffle&&qi===Q.length-1)return;else next()};
+vid.onended=()=>{sync();
+ if(repeat===2){vid.currentTime=0;vid.play();return}
+ if(repeat===0&&!shuffle&&qi===Q.length-1)return;
+ next()};
 vid.onerror=()=>{const t=cur();if(!t||!vid.getAttribute('src'))return;toast('Formato não suportado: '+t.title);if(Q.length>1)setTimeout(next,1500)};
 let seeking=false;const sk=$('seek');
 vid.ontimeupdate=()=>{const d=vid.duration||0,c=vid.currentTime;$('tc').textContent=fmt(c);$('td').textContent=fmt(d);$('bp').style.width=(d?c/d*100:0)+'%';if(!seeking){sk.max=d;sk.value=c}sk.style.setProperty('--p',(d?c/d*100:0)+'%')};
 sk.oninput=()=>{seeking=true;vid.currentTime=parseFloat(sk.value);sk.style.setProperty('--p',(sk.value/(sk.max||1)*100)+'%')};sk.onchange=sk.ontouchend=sk.onmouseup=()=>{seeking=false};
 if('mediaSession' in navigator){const a=(n,f)=>{try{navigator.mediaSession.setActionHandler(n,f)}catch(e){}};
  a('play',()=>vid.play());a('pause',()=>vid.pause());a('previoustrack',prev);a('nexttrack',next);a('seekto',d=>{if(d.seekTime!=null)vid.currentTime=d.seekTime})}
+
+// ===== Gestos: swipe no "Tocando agora" (fechar p/ baixo, trocar p/ lados) =====
+(function(){const np=$('np');let sx=0,sy=0,active=false;
+ np.addEventListener('pointerdown',e=>{if(!np.classList.contains('open')||np.classList.contains('vmode'))return;active=true;sx=e.clientX;sy=e.clientY});
+ np.addEventListener('pointerup',e=>{if(!active)return;active=false;const dx=e.clientX-sx,dy=e.clientY-sy;
+  if(Math.abs(dy)>80&&dy>0&&Math.abs(dy)>Math.abs(dx))closeNP();
+  else if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy))dx>0?prev():next()});
+ np.addEventListener('pointercancel',()=>{active=false})})();
 
 // ===== Tela cheia (esconde a barra do Chrome) =====
 const toggleFS=()=>{if(document.fullscreenElement)document.exitFullscreen();else document.documentElement.requestFullscreen({navigationUI:'hide'}).catch(()=>toast('Tela cheia indisponível.'))};
@@ -306,7 +316,14 @@ if(android&&!matchMedia('(display-mode: fullscreen), (display-mode: standalone)'
 addEventListener('keydown',e=>{if(e.key==='MediaTrackNext')next();else if(e.key==='MediaTrackPrevious')prev();else if(e.key==='MediaPlayPause')toggle();else if(e.key==='Escape')closeNP()});
 history.pushState({},'');addEventListener('popstate',()=>{history.pushState({},'');if($('np').classList.contains('open'))closeNP();else if(view==='coll'){view=prevView;coll=null;render()}});
 
-$('n-fs').innerHTML=nic('fs',0)+'Tela cheia';
+// ===== Abrir arquivos via "Abrir com" (launchQueue) =====
+if('launchQueue' in window&&'files' in LaunchParams.prototype){
+ launchQueue.setConsumer(async p=>{if(!p.files||!p.files.length)return;
+  try{const fs=await Promise.all(p.files.map(h=>h.getFile()));addFiles(fs)}catch(e){toast('Não foi possível abrir o arquivo.')}});
+}
+
+$('n-home').innerHTML=ic('home','1.6rem')+'Início';$('n-search').innerHTML=ic('search','1.6rem')+'Buscar';$('n-lib').innerHTML=ic('lib','1.6rem')+'Biblioteca';
+$('n-local').innerHTML=ic('folder','1.6rem')+'Arquivos locais';$('n-fs').innerHTML=ic('fs','1.6rem')+'Tela cheia';
 $('bprev').innerHTML=ic('prev','1.8rem');$('bnext').innerHTML=ic('next','1.8rem');$('nprev').innerHTML=ic('prev','2.2rem');$('nnext').innerHTML=ic('next','2.2rem');
 $('bpl').innerHTML=ic('play','2rem');$('bpa').innerHTML=ic('pause','2rem');$('npl').innerHTML=ic('play','2.5rem');$('npa').innerHTML=ic('pause','2.5rem');
 $('nsh').innerHTML=ic('shuf','1.6rem');$('nrp').innerHTML=ic('rep','1.6rem');$('npdown').innerHTML=ic('down','2.4rem');
