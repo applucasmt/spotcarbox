@@ -1,5 +1,5 @@
 // Service Worker - funciona offline depois da primeira visita
-const CACHE_NAME = 'carbox-music-v5';
+const CACHE_NAME = 'carbox-music-v6';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   self.skipWaiting();
