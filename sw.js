@@ -1,5 +1,4 @@
-// Service Worker - funciona offline depois da primeira visita
-const CACHE_NAME = 'carbox-music-v6';
+const CACHE_NAME = 'carbox-music-v7';
 const FILES = ['./', './index.html', './manifest.json', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   self.skipWaiting();
@@ -8,7 +7,6 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
   e.waitUntil(caches.keys().then(ns => Promise.all(ns.filter(n => n !== CACHE_NAME).map(n => caches.delete(n)))).then(() => self.clients.claim()));
 });
-// Abre pelo cache na hora e atualiza em segundo plano
 self.addEventListener('fetch', e => {
   const r = e.request;
   if (r.method !== 'GET' || new URL(r.url).origin !== location.origin) return;
