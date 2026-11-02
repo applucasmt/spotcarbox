@@ -167,15 +167,14 @@ let tt;const toast=m=>{$('tmsg').textContent=m;$('toast').className='show';clear
 // ===== Estado =====
 let T=[],IDX={},Q=[],qi=-1,shuffle=false,repeat=1,view='home',prevView='home',coll=null,libTab='mus',filter='',CTX=[],order=0,clrArm=0;
 let likes=ls('likes',{}),recents=ls('recents',[]),playlists=ls('playlists',[]),stats=ls('stats',{plays:{},time:{},since:Date.now()}),theme=ls('theme','dark');
-let playlistsDb=[]; // playlists vindas do IndexedDB (se existirem)
-const vid=$('vid'),vidB=$('vidB'),audio=$('vid');
+let playlistsDb=[];
+const vid=$('vid'),vidB=$('vidB');
 const CAP=250*1048576;
 const android=/Android/i.test(navigator.userAgent),canDir=!!window.showDirectoryPicker;
 const cur=()=>qi>-1?T[Q[qi]]:null;
 const artistOf=t=>t.artist||'Artista desconhecido',albumOf=t=>t.album||t.folder||'Arquivos locais';
 let lrcCache={},coverOverride=ls('coverOverride',{});
 
-// ===== Tema =====
 function applyTheme(){document.body.classList.toggle('light',theme==='light');document.documentElement.style.setProperty('--bg',theme==='light'?'#f2f2f7':'#000')}
 applyTheme();
 
@@ -187,7 +186,7 @@ const idb=new Promise((res,rej)=>{if(!window.indexedDB)return rej();const r=inde
  if(!d.objectStoreNames.contains('cv'))d.createObjectStore('cv',{keyPath:'key'});
  if(!d.objectStoreNames.contains('lrc'))d.createObjectStore('lrc',{keyPath:'id'});
 };r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
-const dbDo=(mode,fn)=>idb.then(db=>new Promise((res,rej)=>{const names=['m','x','pl','cv','lrc'];const stores=mode==='readwrite'?names:names;const tx=db.transaction(stores,mode);fn({m:tx.objectStore('m'),x:tx.objectStore('x'),pl:tx.objectStore('pl'),cv:tx.objectStore('cv'),lrc:tx.objectStore('lrc')});tx.oncomplete=()=>res();tx.onerror=tx.onabort=()=>rej(tx.error)}));
+const dbDo=(mode,fn)=>idb.then(db=>new Promise((res,rej)=>{const names=['m','x','pl','cv','lrc'];const tx=db.transaction(names,mode);fn({m:tx.objectStore('m'),x:tx.objectStore('x'),pl:tx.objectStore('pl'),cv:tx.objectStore('cv'),lrc:tx.objectStore('lrc')});tx.oncomplete=()=>res();tx.onerror=tx.onabort=()=>rej(tx.error)}));
 const fail=e=>{const q=e&&e.name==='QuotaExceededError';toast(q?'Sem espaço no aparelho. Limpe a biblioteca ou remova arquivos grandes.':'Sem espaço para salvar na biblioteca.')};
 const dbPut=t=>dbDo('readwrite',s=>{s.m.put({id:t.id,type:t.type,size:t.size,order:t.order,file:t.file,folder:t.folder});s.x.put({id:t.id,title:t.title,artist:t.artist,album:t.album,cover:t.coverBlob,color:t.color})}).catch(fail);
 const dbMeta=t=>dbDo('readwrite',s=>s.x.put({id:t.id,title:t.title,artist:t.artist,album:t.album,cover:t.coverBlob,color:t.color})).catch(()=>{});
@@ -250,7 +249,6 @@ async function handlePlaylistFile(file){const txt=await file.text();const entrie
   playlists.push(pl);sv('playlists',playlists);
   toast(added+' de '+names.length+' faixas adicionadas e playlist "'+pl.name+'" criada.');
   go('playlists')};
- // Tenta match com arquivos já existentes
  const existing=names.map(n=>T.find(t=>t.file.name.toLowerCase()===n.toLowerCase())).filter(Boolean);
  if(existing.length===names.length){return apply(existing.map(t=>t.file))}
  toast('Selecione os arquivos da playlist "'+file.name+'".');$('fi').onchange=async e=>{const fs=[...e.target.files];e.target.value='';$('fi').onchange=origFiChange;await apply(fs)};
@@ -291,7 +289,6 @@ async function pickDir(){try{const h=await showDirectoryPicker(),out=[];
  for(const lf of lrcs){const base=lf._rel.replace(/\.lrc$/i,'');const mt=media.find(m=>{const k=(m._rel||m.name).replace(/\.[^.]+$/,'');return k===base||k.endsWith('/'+base.split('/').pop())});if(mt){const t=T.find(x=>x.file.name===mt.name);if(t){const text=await lf.text();lrcCache[t.id]=parseLrc(text);dbDo('readwrite',s=>s.lrc.put({id:t.id,text})).catch(()=>{})}}}
  }catch(e){}}
 const addDir=()=>canDir?pickDir():$('fd').click();
-let origFiChange;
 origFiChange=e=>{addFiles(e.target.files);e.target.value=''};
 $('fi').onchange=e=>{const fs=[...e.target.files];e.target.value='';
  const pls=fs.filter(f=>kind(f)==='playlist');if(pls.length){handlePlaylistFile(pls[0]);return}
@@ -307,11 +304,8 @@ async function restore(){const a=(await dbAll()).sort((x,y)=>x.order-y.order);
  let dirty=false;Object.keys(likes).forEach(k=>{if(!ids.has(k)){delete likes[k];dirty=true}});
  const rc=recents.filter(id=>ids.has(id));if(rc.length!==recents.length){recents=rc;dirty=true}
  if(dirty){sv('likes',likes);sv('recents',recents)}
- // capas customizadas por álbum
  const covers=await dbCovers();for(const c of covers){coverOverride[c.key]=URL.createObjectURL(c.blob);applyCoverToAlbum(c.key,c.blob)}
- // playlists do IndexedDB
  playlistsDb=await dbPlAll();
- // letras
  const lrcs=await dbLrcAll();lrcs.forEach(r=>{if(!lrcCache[r.id])lrcCache[r.id]=parseLrc(r.text)});
  const l=ls('last',null);if(l&&IDX[l]!==undefined){Q=T.map((_,i)=>i);qi=IDX[l];upd()}
  applyTheme();render()}
@@ -425,14 +419,13 @@ const playAt=i=>{Q=CTX.slice();qi=Q.indexOf(i);start()};
 const playOne=i=>{Q=T.map((_,k)=>k);qi=i;start()};
 function start(skipFade){
  const t=cur();if(!t)return;
- // crossfade se ativo e havia faixa tocando
  if(!skipFade&&cfg.crossfade>0&&activeVid.src&&!activeVid.paused&&activeVid.currentTime>1){
   const dur=cfg.crossfade;nextVid.src=t.url;nextVid.currentTime=0;nextVid.volume=0;nextVid.play().then(()=>{
    const steps=30,inc=1/steps;let i=0;clearInterval(fadeTimer);
    fadeTimer=setInterval(()=>{i++;const p=Math.min(1,i/steps);nextVid.volume=p;activeVid.volume=1-p;
     if(i>=steps){clearInterval(fadeTimer);activeVid.pause();activeVid.removeAttribute('src');activeVid.load();
      const tmp=activeVid;activeVid=nextVid;nextVid=tmp;activeVid.className='show';nextVid.className='';
-     activeVid.onplay=vidOnPlay;activeVid.onpause=vidOnPause;activeVid.onended=vidOnEnded;activeVid.onerror=vidOnError;activeVid.ontimeupdate=vidOnTime;bindSeek(activeVid)}},dur*1000/steps)})}
+     activeVid.onplay=vidOnPlay;activeVid.onpause=vidOnPause;activeVid.onended=vidOnEnded;activeVid.onerror=vidOnError;activeVid.ontimeupdate=vidOnTime;}},dur*1000/steps)})}
  else{activeVid.src=t.url;activeVid.volume=1;const p=activeVid.play();if(p&&p.catch)p.catch(()=>toast('Toque em play.'));activeVid.className='show';nextVid.className=''}
  recents=[t.id,...recents.filter(x=>x!==t.id)].slice(0,12);sv('recents',recents);sv('last',t.id);
  stats.plays[t.id]=(stats.plays[t.id]||0)+1;sv('stats',stats);
@@ -452,11 +445,10 @@ function cycleRate(){const rates=[0.5,0.75,1,1.25,1.5,1.75,2];const i=rates.inde
 let cfg=ls('cfg',{eq:'off',eqBass:0,eqMid:0,eqTreble:0,crossfade:0,sleep:0,proc:false});
 function saveCfg(){sv('cfg',cfg)}
 
-// ===== Web Audio (EQ, analyser, compressor, fade) =====
+// ===== Web Audio (EQ, analyser, compressor) =====
 let actx=null,src=null,srcB=null,chain=null,vizOn=false;
 function buildChain(){
  if(!actx)return;
- // compressor + EQ + gain
  const comp=actx.createDynamicsCompressor();
  const bass=actx.createBiquadFilter();bass.type='lowshelf';bass.frequency.value=200;
  const mid=actx.createBiquadFilter();mid.type='peaking';mid.frequency.value=1000;mid.Q.value=0.7;
@@ -475,12 +467,10 @@ function applyEq(){
 }
 async function toggleAudioProc(){
  if(cfg.proc){
-  // desliga (recria contexto)
   try{if(actx){await actx.close()}}catch(e){}
   actx=null;src=null;srcB=null;chain=null;
   cfg.proc=false;saveCfg();$('nproc').textContent='EQ off';
-  toast('Processamento desligado. Recarregue a faixa para aplicar.');
-  return}
+  toast('Processamento desligado. Recarregue a faixa para aplicar.');return}
  try{
   actx=new (window.AudioContext||window.webkitAudioContext)();
   if(actx.state==='suspended')await actx.resume();
@@ -499,7 +489,7 @@ function startViz(){if(!chain||!chain.analyser)return;const cvs=document.createE
 
 // ===== Sleep timer =====
 let sleepTimer=null,sleepTarget=0;
-function openSleepMenu(){const opts=[0,5,10,15,30,45,60,90,120];const m=prompt('Sleep timer (minutos, 0 para cancelar):\n'+opts.join(', '));if(m===null)return;const min=parseInt(m)||0;
+function openSleepMenu(){const m=prompt('Sleep timer (minutos, 0 para cancelar):');if(m===null)return;const min=parseInt(m)||0;
  clearTimeout(sleepTimer);sleepTimer=null;
  if(!min){toast('Sleep timer cancelado.');return}
  sleepTarget=Date.now()+min*60000;sleepTimer=setTimeout(()=>{activeVid.pause();toast('Sleep timer: pausado.');$('nsleep').textContent='Sleep'},min*60000);
@@ -535,12 +525,9 @@ function vidOnEnded(){sync();
  next()}
 function vidOnError(){const t=cur();if(!t||!activeVid.getAttribute('src'))return;toast('Formato não suportado: '+t.title);if(Q.length>1)setTimeout(next,1500)}
 let seeking=false;const sk=$('seek');
-function bindSeek(el){/* seek é global, liga-se ao activeVid em start */ }
 function vidOnTime(){const d=activeVid.duration||0,c=activeVid.currentTime;
  $('tc').textContent=fmt(c);$('td').textContent=fmt(d);$('bp').style.width=(d?c/d*100:0)+'%';if(!seeking){sk.max=d;sk.value=c}sk.style.setProperty('--p',(d?c/d*100:0)+'%');
- // stats: conta tempo
  const t=cur();if(t&&!activeVid.paused){const now=Date.now();const dt=(now-(vidOnTime._last||now))/1000;if(dt>0&&dt<2)stats.time[t.id]=(stats.time[t.id]||0)+dt;vidOnTime._last=now}
- // letra
  const lines=lrcCache[t?t.id:0];if(lines)renderLrc(lines,c)}
 function attachHandlers(el){el.onplay=vidOnPlay;el.onpause=vidOnPause;el.onended=vidOnEnded;el.onerror=vidOnError;el.ontimeupdate=vidOnTime}
 attachHandlers(vid);attachHandlers(vidB);
@@ -556,7 +543,7 @@ if('mediaSession' in navigator){const a=(n,f)=>{try{navigator.mediaSession.setAc
   else if(Math.abs(dx)>80&&Math.abs(dx)>Math.abs(dy))dx>0?prev():next()});
  np.addEventListener('pointercancel',()=>{active=false})})();
 
-// ===== Configurações / Telas extras =====
+// ===== Ajustes =====
 function openSettings(){const m=$('main');
  let h='<h1>Ajustes</h1>';
  h+='<div class="panel"><div class="small">Reprodução</div>'+
@@ -604,9 +591,10 @@ $('n-play').innerHTML=ic('list','1.6rem')+'Playlists';$('n-local').innerHTML=ic(
 $('bprev').innerHTML=ic('prev','1.8rem');$('bnext').innerHTML=ic('next','1.8rem');$('nprev').innerHTML=ic('prev','2.2rem');$('nnext').innerHTML=ic('next','2.2rem');
 $('bpl').innerHTML=ic('play','2rem');$('bpa').innerHTML=ic('pause','2rem');$('npl').innerHTML=ic('play','2.5rem');$('npa').innerHTML=ic('pause','2.5rem');
 $('nsh').innerHTML=ic('shuf','1.6rem');$('nrp').innerHTML=ic('rep','1.6rem');$('npdown').innerHTML=ic('down','2.4rem');$('npip').innerHTML=ic('pip','1.6rem');
-// botão de ajustes na home (inline) — acesso rápido
-document.addEventListener('dblclick',e=>{if(e.target.closest('#nav'))openSettings()});
-const nav=$('nav');const st=document.createElement('button');st.className='ni';st.innerHTML=ic('eq','1.6rem')+'Ajustes';st.onclick=openSettings;nav.insertBefore(st,$('n-fs'));
+
+// botão de ajustes fixo
+const nav=$('nav');const stBtn=document.createElement('button');stBtn.className='ni';stBtn.innerHTML=ic('eq','1.6rem')+'Ajustes';stBtn.onclick=openSettings;nav.insertBefore(stBtn,$('n-fs'));
+
 render();restore();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 </script></body></html>
